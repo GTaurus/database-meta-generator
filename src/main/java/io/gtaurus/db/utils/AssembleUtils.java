@@ -103,7 +103,7 @@ public class AssembleUtils {
       ResultSet idxRs =
           metaData.getIndexInfo(null, schema, summaryModel.getTableName(), false, false);
       List<Map<String, Object>> indexList = parseResultSetToMapList(idxRs);
-      indexList.forEach(System.out::println);
+      logDetail(indexList);
       Map<String, SortedSet<TableIndexDetailModel>> uimap = new HashMap<>();
       Map<String, SortedSet<TableIndexDetailModel>> imap = new HashMap<>();
 
@@ -169,7 +169,7 @@ public class AssembleUtils {
       System.out.println(summaryModel.getTableName() + " COLUMN START");
       ResultSet cRs = metaData.getColumns(null, schema, summaryModel.getTableName(), "%");
       List<Map<String, Object>> cList = parseResultSetToMapList(cRs);
-      //      cList.forEach(System.out::println);
+      logDetail(cList);
       TreeSet<TableMetaDetailModel> details =
           new TreeSet<>(Comparator.comparing((TableMetaDetailModel::getOrdinalPosition)));
 
@@ -179,7 +179,13 @@ public class AssembleUtils {
             detail.setColumnName((String) l.get("COLUMN_NAME"));
             detail.setColumnNameComment((String) l.get("REMARKS"));
             detail.setColumnType((String) l.get("TYPE_NAME"));
-            detail.setColumnSize((String) l.get("COLUMN_SIZE"));
+            if (l.get("DECIMAL_DIGITS") == null) {
+              detail.setColumnSize((String) l.get("COLUMN_SIZE"));
+            } else if ("0".equals(l.get("COLUMN_SIZE"))) {
+              detail.setColumnSize("*");
+            } else {
+              detail.setColumnSize(l.get("COLUMN_SIZE") + "," + l.get("DECIMAL_DIGITS"));
+            }
             detail.setNullable((String) l.get("IS_NULLABLE"));
             detail.setColumnDef((String) l.get("COLUMN_DEF"));
             detail.setAutoIncrement((String) l.get("IS_AUTOINCREMENT"));
@@ -194,6 +200,12 @@ public class AssembleUtils {
       System.out.println(summaryModel.getTableName() + " COLUMN END");
     } catch (SQLException e) {
       e.printStackTrace();
+    }
+  }
+
+  private static void logDetail(List<Map<String, Object>> list) {
+    if (Boolean.getBoolean("need.detail")) {
+      list.forEach(System.out::println);
     }
   }
 }

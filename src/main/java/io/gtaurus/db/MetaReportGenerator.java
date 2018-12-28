@@ -145,6 +145,6 @@ public class MetaReportGenerator {
   }
 
   public static void writeToFile(String fileName, byte[] fileData) throws Exception {
-    Files.write(Paths.get(Env.FILE_PATH + fileName + ""), fileData, StandardOpenOption.WRITE);
+    Files.write(Paths.get(Env.FILE_PATH + fileName + ".xlsx"), fileData, StandardOpenOption.CREATE);
   }
 }
