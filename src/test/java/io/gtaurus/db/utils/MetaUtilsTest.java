@@ -1,29 +1,20 @@
-package io.gtaurus.db;
+package io.gtaurus.db.utils;
 
-import io.gtaurus.db.meta.models.DbConnModel;
 import io.gtaurus.db.meta.models.TableMetaSummaryModel;
-import io.gtaurus.db.utils.AssembleUtils;
-import io.gtaurus.db.utils.DBUtils;
-import io.gtaurus.db.utils.Env;
-import io.gtaurus.db.utils.FileDataGenerator;
+import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
-public class MetaReportGenerator {
+import static io.gtaurus.db.utils.MetaUtils.genMeta;
 
-  public static void main(String... args) throws Exception {
-    //    genefsBp();
-    genecd();
-  }
+/** Created by GTaurus on 2019/2/11. */
+public class MetaUtilsTest {
 
-  public static void genLoan() throws Exception {
+  @Test
+  public void genLoan() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
     String url = "jdbc:oracle:thin:@//10.116.50.190:1521/efspdb_sit";
@@ -35,7 +26,8 @@ public class MetaReportGenerator {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  public static void genCust() throws Exception {
+  @Test
+  public void genCust() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
     String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
@@ -48,7 +40,8 @@ public class MetaReportGenerator {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  public static void genvfs2Bp() throws Exception {
+  @Test
+  public void genvfs2Bp() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
     String url = "jdbc:sqlserver://10.116.17.93\\QCDATA:1433;database=QCDATA";
@@ -62,7 +55,8 @@ public class MetaReportGenerator {
     writeToFile("AFW_BP", FileDataGenerator.genFileData(models));
   }
 
-  public static void genefsBp() throws Exception {
+  @Test
+  public void genefsBp() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
     String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
@@ -75,7 +69,8 @@ public class MetaReportGenerator {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  public static void genefsw() throws Exception {
+  @Test
+  public void genefsw() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
     String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
@@ -88,7 +83,22 @@ public class MetaReportGenerator {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  public static void genecd() throws Exception {
+  @Test
+  public void genefswLoanInfo() throws Exception {
+
+    String clazz = "oracle.jdbc.OracleDriver";
+    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String user = "EFSW";
+    String password = "efsw";
+    boolean remarksReporting = true;
+
+    List<TableMetaSummaryModel> models =
+        genMeta(clazz, url, user, password, remarksReporting, user, "EFSW_L%");
+    writeToFile(user, FileDataGenerator.genFileData(models));
+  }
+
+  @Test
+  public void genecd() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
     String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
@@ -101,7 +111,8 @@ public class MetaReportGenerator {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  public static void genFund() throws Exception {
+  @Test
+  public void genFund() throws Exception {
 
     String clazz = "com.mysql.jdbc.Driver";
     String url = "jdbc:mysql://10.116.50.109:3306/fundDB";
@@ -114,37 +125,7 @@ public class MetaReportGenerator {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  private static List<TableMetaSummaryModel> genMeta(
-      String clazz,
-      String url,
-      String user,
-      String password,
-      boolean remarksReporting,
-      String schema,
-      String tablePattern) {
-    try (Connection conn =
-        DBUtils.getConnection(genDbConnModel(clazz, url, user, password, remarksReporting))) {
-      DatabaseMetaData metaData = conn.getMetaData();
-
-      return AssembleUtils.assembleSummary(metaData, schema, tablePattern);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Collections.emptyList();
-  }
-
-  private static DbConnModel genDbConnModel(
-      String clazz, String url, String user, String password, boolean remarksReporting) {
-    DbConnModel connModel = new DbConnModel();
-    connModel.setClazz(clazz);
-    connModel.setUrl(url);
-    connModel.setUser(user);
-    connModel.setPassword(password);
-    connModel.setRemarksReporting(remarksReporting);
-    return connModel;
-  }
-
-  public static void writeToFile(String fileName, byte[] fileData) throws Exception {
+  public void writeToFile(String fileName, byte[] fileData) throws Exception {
     Files.write(Paths.get(Env.FILE_PATH + fileName + ".xlsx"), fileData, StandardOpenOption.CREATE);
   }
 }
