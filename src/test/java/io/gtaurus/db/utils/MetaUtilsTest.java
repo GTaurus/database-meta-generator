@@ -79,7 +79,35 @@ public class MetaUtilsTest {
     boolean remarksReporting = true;
 
     List<TableMetaSummaryModel> models =
-        genMeta(clazz, url, user, password, remarksReporting, user, "%");
+        genMeta(clazz, url, user, password, remarksReporting, user, "EFSW%");
+    writeToFile(user, FileDataGenerator.genFileData(models));
+  }
+
+  @Test
+  public void genintfc() throws Exception {
+
+    String clazz = "oracle.jdbc.OracleDriver";
+    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String user = "EFSW";
+    String password = "efsw";
+    boolean remarksReporting = true;
+
+    List<TableMetaSummaryModel> models =
+            genMeta(clazz, url, user, password, remarksReporting, user, "%INTFC%");
+    writeToFile(user, FileDataGenerator.genFileData(models));
+  }
+
+  @Test
+  public void genaccounting() throws Exception {
+
+    String clazz = "oracle.jdbc.OracleDriver";
+    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String user = "EFSW";
+    String password = "efsw";
+    boolean remarksReporting = true;
+
+    List<TableMetaSummaryModel> models =
+            genMeta(clazz, url, user, password, remarksReporting, user, "ACC%");
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
