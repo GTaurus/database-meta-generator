@@ -12,12 +12,14 @@ import static io.gtaurus.db.utils.MetaUtils.genMeta;
 
 /** Created by GTaurus on 2019/2/11. */
 public class MetaUtilsTest {
+  
+  public static final String DB_ADDRESS = "";
 
   @Test
   public void genLoan() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.190:1521/efspdb_sit";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_sit";
     String user = "LOAN";
     String password = "loan";
     boolean remarksReporting = true;
@@ -30,7 +32,7 @@ public class MetaUtilsTest {
   public void genCust() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "CUST";
     String password = "cust";
     boolean remarksReporting = true;
@@ -40,26 +42,12 @@ public class MetaUtilsTest {
     writeToFile(user, FileDataGenerator.genFileData(models));
   }
 
-  @Test
-  public void genvfs2Bp() throws Exception {
-
-    String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:sqlserver://10.116.17.93\\QCDATA:1433;database=QCDATA";
-    String user = "qcdatawrite";
-    String password = "aaaa";
-    boolean remarksReporting = true;
-
-    List<TableMetaSummaryModel> models =
-        genMeta(clazz, url, user, password, remarksReporting, "dbo", "AFW_BP%");
-
-    writeToFile("AFW_BP", FileDataGenerator.genFileData(models));
-  }
 
   @Test
   public void genefsBp() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "BP";
     String password = "bp";
     boolean remarksReporting = true;
@@ -73,7 +61,7 @@ public class MetaUtilsTest {
   public void genefsw() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "EFSW";
     String password = "efsw";
     boolean remarksReporting = true;
@@ -87,7 +75,7 @@ public class MetaUtilsTest {
   public void genintfc() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "EFSW";
     String password = "efsw";
     boolean remarksReporting = true;
@@ -101,7 +89,7 @@ public class MetaUtilsTest {
   public void genaccounting() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "EFSW";
     String password = "efsw";
     boolean remarksReporting = true;
@@ -115,7 +103,7 @@ public class MetaUtilsTest {
   public void genefswLoanInfo() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "EFSW";
     String password = "efsw";
     boolean remarksReporting = true;
@@ -129,7 +117,7 @@ public class MetaUtilsTest {
   public void genecd() throws Exception {
 
     String clazz = "oracle.jdbc.OracleDriver";
-    String url = "jdbc:oracle:thin:@//10.116.50.184:1521/efspdb_dev";
+    String url = "jdbc:oracle:thin:@//" + DB_ADDRESS + "/efspdb_dev";
     String user = "ECD";
     String password = "ecd";
     boolean remarksReporting = true;
